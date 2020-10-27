@@ -1,0 +1,78 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+
+	font-size: 120%;
+	background: #F8F8FF;
+	  
+}
+
+.header{
+	width: 30%;
+	margin: 50px auto 0px;
+  	border: 1px solid #B0C4DE;
+  	background: #5F9EA0;
+  	text-align: center;
+  	color: white;
+  	border-bottom: none;
+  	border-radius: 10px 10px 0px 0px;
+  	padding: 20px;
+
+}
+
+form, .content{
+  margin: 0px auto;
+  width: 30%;
+  padding: 20px;
+  border: 1px solid #B0C4DE;
+  background: white;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.input-group{
+	margin: 10px 0px 10px 0px;
+}
+
+.input-group label {
+	display: block;
+	text-align: left;
+    margin: 3px;
+}
+
+.input-group input {
+    height: 30px;
+    width: 93%;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+
+.btn{
+  background: #5F9EA0;
+  border: none;
+  border-radius: 5px;
+  color:white;
+  padding: 10px;
+  font-size: 15px;
+}
+.error{
+  margin: 0px auto;
+  background: #f2dede;
+  width: 92%;
+  border-radius: 5px;
+  border: 1px solid #a94442;
+  color: #a94442;
+  padding: 10px;
+  text-align: left;
+}
+
+.success{
+	color: #3c763d;
+	background: #dff0d8;
+	border: 1px solid #3c763d;
+	margin-bottom: 20px;
+}
