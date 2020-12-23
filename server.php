@@ -8,21 +8,15 @@
 
 
 	//connect the database
-	define("DB_SERVER", "localhost");
-	define("DB_USER", "root");
-	define("DB_PASSWORD", "QIOqDZ4w6CzYRQlE");
-	define("DB_DATABASE", "registration");
-
-	$db = mysqli_connect(DB_SERVER , DB_USER, DB_PASSWORD, DB_DATABASE); 
-	// $db = mysqli_connect('127.0.0.1', 'root', '', 'registration');
+	$db = mysqli_connect("localhost" , "root", '', 'registration'); 
 
 	// if the registration button is clicked
-	if(isset($_POST['registration'])){
-		$username = mysql_real_escape_string($_POST['username']);
-		$email = mysql_real_escape_string($_POST['email']);
-		$mobile_number = mysql_real_escape_string($_POST['mobilenumber']);
-		$password_1 = mysql_real_escape_string($_POST['password_1']);
-		$password_2 = mysql_real_escape_string($_POST['password_2']);
+	if(isset($_POST['register'])){
+		$username = mysqli_real_escape_string($db, $_POST['username']);
+		$email = mysqli_real_escape_string($db, $_POST['email']);
+		$mobile_number = mysqli_real_escape_string($db, $_POST['mobile_number']);
+		$password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
+		$password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
 
 		// ensure that form fields are filled properly
 		if(empty($username)){
@@ -37,10 +31,29 @@
 		if(empty($password_1)){
 			array_push($errors,"Password_1 is required");
 		}
-		if(empty($password_2 != $password_1)){
+		if($password_1 != $password_2){
 			array_push($errors,"The two passwords do not match");
 		}
 
+
+		// first check the database to make sure 
+  		// a user does not already exist with the same username and/or email
+
+  		$user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email' LIMIT 1";
+  		$result = mysqli_query($db, $user_check_query);
+  		$user = mysqli_fetch_assoc($result);
+  
+  		if ($user) { // if user exists
+    		if ($user['username'] === $username) {
+      		array_push($errors, "Username already exists");
+    		}
+
+    		if ($user['email'] === $email) {
+      		array_push($errors, "email already exists");
+    		}
+  		}
+
+  		
 		//if there are no errors save user to database
 		if(count($errors) == 0){
 			$password = md5($password_1);
@@ -53,21 +66,21 @@
 		}
 	}
 	if (isset($_POST['login'])) {
-		$email = mysql_real_escape_string($_POST['email']);
-		$password = mysql_real_escape_string($_POST['password']);
+		$username = mysqli_real_escape_string($db, $_POST['username']);
+		$password = mysqli_real_escape_string($db, $_POST['password']);
 
-		if(empty($email)){
-			array_push($errors,"Email id is required");
+		if(empty($username)){
+			array_push($errors,"User name is required");
 		}
 		if(empty($password)){
 			array_push($errors,"Password is required");
 		}
 
 		if(count($errors) == 0){
-			$password = md5($password_1);
-			$query = "SELECT * FROM users WHERE username='$username' AND password = '$password";
+			$password = md5($password);
+			$query = "SELECT * FROM users WHERE username='$username' AND password = '$password'";
 			$result = mysqli_query($db, $query);
-			if (mysql_num_rows($result) == 1) {
+			if (mysqli_num_rows($result) == 1) {
 				$_SESSION['username'] = $username;
 				$_SESSION['success'] = "You are now logged in";
 				header('location: index.php');
